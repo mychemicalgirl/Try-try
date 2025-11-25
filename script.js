@@ -19,6 +19,7 @@ const difficultySelect = document.getElementById('difficulty')
 const startBtn = document.getElementById('start')
 const playerSelect = document.getElementById('player')
 const startScreen = document.getElementById('start-screen')
+const boardContainer = document.getElementById('game-screen')
 
 // participants: human/AI (human defaults to X)
 let humanPlayer = 'X'
@@ -196,8 +197,9 @@ startBtn.addEventListener('click', ()=>{
 	// set participants based on selection
 	humanPlayer = playerSelect.value
 	aiPlayer = humanPlayer === 'X' ? 'O' : 'X'
-	// hide start screen and begin
+	// hide start screen and show game board
 	if(startScreen) startScreen.classList.add('hidden')
+	if(boardContainer) boardContainer.classList.remove('hidden')
 	resetGame()
 	// If AI mode and AI should start (AI equals currentPlayer after reset), let it play
 	if(modeSelect.value === 'ai' && aiPlayer === currentPlayer){
@@ -208,7 +210,8 @@ startBtn.addEventListener('click', ()=>{
 // Make Reset return to the start screen so user can change settings
 resetBtn.addEventListener('click', ()=>{
 	if(startScreen) startScreen.classList.remove('hidden')
-	// clear board and pause until Start pressed
+	// hide board and pause until Start pressed
+	if(boardContainer) boardContainer.classList.add('hidden')
 	boardState = Array(9).fill(null)
 	isGameActive = false
 	currentPlayer = X

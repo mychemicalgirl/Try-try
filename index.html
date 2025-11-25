@@ -10,7 +10,29 @@
 	<main class="app">
 		<h1>Tic Tac Toe</h1>
 
-		<div class="board-container">
+			<!-- Start screen: select mode, difficulty and player -->
+			<div id="start-screen" class="start-screen">
+				<h2>Start</h2>
+				<label for="mode">Modalità:</label>
+				<select id="mode">
+					<option value="pvp">2 Giocatori</option>
+					<option value="ai">Vs AI</option>
+				</select>
+				<label for="difficulty">Difficoltà:</label>
+				<select id="difficulty" disabled>
+					<option value="easy">Facile</option>
+					<option value="medium" selected>Medio</option>
+					<option value="hard">Difficile</option>
+				</select>
+				<label for="player">Gioca come:</label>
+				<select id="player">
+					<option value="X" selected>X</option>
+					<option value="O">O</option>
+				</select>
+				<button id="start">Start</button>
+			</div>
+
+			<div class="board-container">
 			<div id="status" class="status">Turno: <span id="current">X</span></div>
 			<div class="board" id="board" role="grid" aria-label="Tic Tac Toe">
 				<button class="cell" data-cell="0" aria-label="Cella 1"></button>
@@ -24,33 +46,7 @@
 				<button class="cell" data-cell="8" aria-label="Cella 9"></button>
 			</div>
 			<div class="controls">
-				<div class="play-controls">
-					<label for="mode">Modalità:</label>
-					<select id="mode">
-						<option value="pvp">2 Giocatori</option>
-						<option value="ai">Vs AI</option>
-					</select>
-					<label for="difficulty">Difficoltà:</label>
-					<select id="difficulty" disabled>
-						<option value="easy">Facile</option>
-						<option value="medium" selected>Medio</option>
-						<option value="hard">Difficile</option>
-					</select>
-					<label for="player">Gioca come:</label>
-					<select id="player">
-						<option value="X" selected>X</option>
-						<option value="O">O</option>
-					</select>
-					<button id="start">Start</button>
-					<label for="theme">Colore:</label>
-					<select id="theme">
-						<option value="#3b82f6" selected>Blu</option>
-						<option value="#10b981">Verde</option>
-						<option value="#8b5cf6">Viola</option>
-						<option value="#f97316">Arancio</option>
-					</select>
-					<button id="reset">Reset</button>
-				</div>
+				<button id="reset">Reset</button>
 			</div>
 		</div>
 

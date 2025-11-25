@@ -17,8 +17,8 @@ const resetBtn = document.getElementById('reset')
 const modeSelect = document.getElementById('mode')
 const difficultySelect = document.getElementById('difficulty')
 const startBtn = document.getElementById('start')
-const themeSelect = document.getElementById('theme')
 const playerSelect = document.getElementById('player')
+const startScreen = document.getElementById('start-screen')
 
 // participants: human/AI (human defaults to X)
 let humanPlayer = 'X'
@@ -196,9 +196,8 @@ startBtn.addEventListener('click', ()=>{
 	// set participants based on selection
 	humanPlayer = playerSelect.value
 	aiPlayer = humanPlayer === 'X' ? 'O' : 'X'
-	// apply theme color
-	const color = themeSelect.value
-	document.documentElement.style.setProperty('--accent', color)
+	// hide start screen and begin
+	if(startScreen) startScreen.classList.add('hidden')
 	resetGame()
 	// If AI mode and AI should start (AI equals currentPlayer after reset), let it play
 	if(modeSelect.value === 'ai' && aiPlayer === currentPlayer){
@@ -206,12 +205,21 @@ startBtn.addEventListener('click', ()=>{
 	}
 })
 
+// Make Reset return to the start screen so user can change settings
+resetBtn.addEventListener('click', ()=>{
+	if(startScreen) startScreen.classList.remove('hidden')
+	// clear board and pause until Start pressed
+	boardState = Array(9).fill(null)
+	isGameActive = false
+	currentPlayer = X
+	statusEl.textContent = 'Seleziona impostazioni e premi Start'
+	renderBoard()
+})
+
 difficultySelect.addEventListener('change', ()=> resetGame())
 
 // allow theme change without pressing start
-themeSelect.addEventListener('change', ()=>{
-	document.documentElement.style.setProperty('--accent', themeSelect.value)
-})
+// themeSelect removed; theme option was causing issues and was removed
 
 statusEl.textContent = 'Turno: '
 renderBoard()

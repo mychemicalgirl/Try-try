@@ -25,6 +25,14 @@ h1{margin:0 0 1rem;font-size:1.5rem}
 .board-container{background:var(--card);padding:1rem;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
 .status{font-weight:600;margin-bottom:0.75rem;color:var(--muted)}
 .board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+
+/* Start screen styles */
+.start-screen{background:var(--card);padding:1.25rem;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06);margin-bottom:14px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.start-screen h2{margin:0;font-size:1.25rem}
+.start-screen label{font-size:0.95rem;color:var(--muted)}
+.start-screen select{padding:0.45rem 0.6rem;border-radius:6px;border:1px solid #e6edf6;background:white}
+.start-screen #start{background:var(--accent);border:none;color:white;padding:0.6rem 1rem;border-radius:8px;cursor:pointer}
+.start-screen.hidden{display:none}
 .cell{
 	aspect-ratio:1/1;
 	width:100%;

@@ -16,6 +16,8 @@ const currentEl = document.getElementById('current')
 const resetBtn = document.getElementById('reset')
 const modeSelect = document.getElementById('mode')
 const difficultySelect = document.getElementById('difficulty')
+const startBtn = document.getElementById('start')
+const themeSelect = document.getElementById('theme')
 
 function renderBoard(){
 	cells.forEach((cell, i) => {
@@ -174,11 +176,30 @@ function getWinner(state){
 // Init
 cells.forEach(cell => cell.addEventListener('click', handleCellClick))
 resetBtn.addEventListener('click', resetGame)
+// When user changes mode, enable difficulty selector when AI selected.
 modeSelect.addEventListener('change', ()=>{
-	difficultySelect.disabled = modeSelect.value !== 'ai'
-	resetGame()
+	const isAi = modeSelect.value === 'ai'
+	difficultySelect.disabled = !isAi
+	// visually focus difficulty when switching to AI
+	if(isAi) difficultySelect.focus()
 })
+
+// Start applies the selected options and resets the game.
+startBtn.addEventListener('click', ()=>{
+	// apply theme color
+	const color = themeSelect.value
+	document.documentElement.style.setProperty('--accent', color)
+	resetGame()
+	// If AI mode and AI should start (we keep X as player starting), no immediate AI move.
+	// If you want AI to start, add logic here.
+})
+
 difficultySelect.addEventListener('change', ()=> resetGame())
+
+// allow theme change without pressing start
+themeSelect.addEventListener('change', ()=>{
+	document.documentElement.style.setProperty('--accent', themeSelect.value)
+})
 
 statusEl.textContent = 'Turno: '
 renderBoard()

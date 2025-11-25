@@ -49,6 +49,10 @@ h1{margin:0 0 1rem;font-size:1.5rem}
 .play-controls select{padding:0.35rem 0.5rem;border-radius:6px;border:1px solid #e6edf6;background:white}
 .play-controls label{font-size:0.9rem;color:var(--muted)}
 
+.play-controls #start{background:var(--accent);border:none;color:white;padding:0.45rem 0.7rem;border-radius:6px;cursor:pointer}
+.play-controls #start:hover{opacity:0.95}
+.play-controls #theme{width:90px}
+
 .cell.win{background:linear-gradient(90deg, #ecfdf5, #d1fae5);border-color:var(--win);color:var(--win)}
 .note{margin-top:10px;color:var(--muted);font-size:0.9rem}
 

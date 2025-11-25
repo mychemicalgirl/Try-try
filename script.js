@@ -18,6 +18,11 @@ const modeSelect = document.getElementById('mode')
 const difficultySelect = document.getElementById('difficulty')
 const startBtn = document.getElementById('start')
 const themeSelect = document.getElementById('theme')
+const playerSelect = document.getElementById('player')
+
+// participants: human/AI (human defaults to X)
+let humanPlayer = 'X'
+let aiPlayer = 'O'
 
 function renderBoard(){
 	cells.forEach((cell, i) => {
@@ -47,8 +52,8 @@ function makeMove(idx, player){
 		return
 	}
 	swapPlayer()
-	if(modeSelect.value === 'ai' && isGameActive && currentPlayer === O){
-		// let AI play as O
+	if(modeSelect.value === 'ai' && isGameActive && currentPlayer === aiPlayer){
+		// let AI play its assigned symbol
 		setTimeout(() => aiPlay(), 300)
 	}
 }
@@ -104,7 +109,7 @@ function aiPlay(){
 	if(diff === 'easy') move = aiRandom()
 	else if(diff === 'medium') move = aiMedium()
 	else move = aiHard()
-	if(typeof move === 'number') makeMove(move, O)
+	if(typeof move === 'number') makeMove(move, aiPlayer)
 }
 
 function aiRandom(){
@@ -114,16 +119,16 @@ function aiRandom(){
 }
 
 function aiMedium(){
-	// 1) win if possible
+	// 1) win if possible for AI
 	for(let i=0;i<9;i++) if(!boardState[i]){
-		boardState[i]=O
-		if(checkWin(O)){ boardState[i]=null; return i }
+		boardState[i]=aiPlayer
+		if(checkWin(aiPlayer)){ boardState[i]=null; return i }
 		boardState[i]=null
 	}
-	// 2) block player
+	// 2) block human
 	for(let i=0;i<9;i++) if(!boardState[i]){
-		boardState[i]=X
-		if(checkWin(X)){ boardState[i]=null; return i }
+		boardState[i]=humanPlayer
+		if(checkWin(humanPlayer)){ boardState[i]=null; return i }
 		boardState[i]=null
 	}
 	// 3) take center
@@ -132,23 +137,23 @@ function aiMedium(){
 }
 
 function aiHard(){
-	// Minimax for optimal play (AI is O)
+	// Minimax for optimal play (generalized for aiPlayer)
 	function minimax(state, player){
 		const winner = getWinner(state)
-		if(winner === O) return {score: 1}
-		if(winner === X) return {score: -1}
+		if(winner === aiPlayer) return {score: 1}
+		if(winner === humanPlayer) return {score: -1}
 		if(state.every(Boolean)) return {score: 0}
 
 		const moves = []
 		for(let i=0;i<9;i++){
 			if(!state[i]){
 				state[i] = player
-				const result = minimax(state, player===O?X:O)
+				const result = minimax(state, player===aiPlayer?humanPlayer:aiPlayer)
 				moves.push({index:i, score: result.score})
 				state[i] = null
 			}
 		}
-		if(player === O){
+		if(player === aiPlayer){
 			// maximize
 			let best = moves[0]
 			for(const m of moves) if(m.score > best.score) best = m
@@ -161,7 +166,7 @@ function aiHard(){
 		}
 	}
 	const copy = boardState.slice()
-	const best = minimax(copy, O)
+	const best = minimax(copy, aiPlayer)
 	return best.index
 }
 
@@ -186,12 +191,17 @@ modeSelect.addEventListener('change', ()=>{
 
 // Start applies the selected options and resets the game.
 startBtn.addEventListener('click', ()=>{
+	// set participants based on selection
+	humanPlayer = playerSelect.value
+	aiPlayer = humanPlayer === 'X' ? 'O' : 'X'
 	// apply theme color
 	const color = themeSelect.value
 	document.documentElement.style.setProperty('--accent', color)
 	resetGame()
-	// If AI mode and AI should start (we keep X as player starting), no immediate AI move.
-	// If you want AI to start, add logic here.
+	// If AI mode and AI should start (AI equals currentPlayer after reset), let it play
+	if(modeSelect.value === 'ai' && aiPlayer === currentPlayer){
+		setTimeout(()=> aiPlay(), 300)
+	}
 })
 
 difficultySelect.addEventListener('change', ()=> resetGame())

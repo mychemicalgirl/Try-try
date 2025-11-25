@@ -35,7 +35,9 @@ function renderBoard(){
 
 function handleCellClick(e){
 	const idx = Number(e.currentTarget.dataset.cell)
+	// If AI mode, only allow clicks when it's the human's turn
 	if(!isGameActive || boardState[idx]) return
+	if(modeSelect.value === 'ai' && currentPlayer !== humanPlayer) return
 	makeMove(idx, currentPlayer)
 }
 

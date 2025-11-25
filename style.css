@@ -44,7 +44,7 @@ h1{margin:0 0 1rem;font-size:1.5rem}
 .controls{margin-top:12px;display:flex;gap:8px;justify-content:center}
 .play-controls{display:flex;gap:8px;align-items:center}
 #reset{background:transparent;border:1px solid var(--accent);padding:0.5rem 1rem;border-radius:8px;color:var(--accent);cursor:pointer}
-#reset:hover{background:rgba(59,130,246,0.06)}
+#reset:hover{background:var(--accent);color:white}
 
 .play-controls select{padding:0.35rem 0.5rem;border-radius:6px;border:1px solid #e6edf6;background:white}
 .play-controls label{font-size:0.9rem;color:var(--muted)}

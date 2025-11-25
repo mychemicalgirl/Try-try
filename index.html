@@ -24,7 +24,20 @@
 				<button class="cell" data-cell="8" aria-label="Cella 9"></button>
 			</div>
 			<div class="controls">
-				<button id="reset">Reset</button>
+				<div class="play-controls">
+					<label for="mode">Modalità:</label>
+					<select id="mode">
+						<option value="pvp">2 Giocatori</option>
+						<option value="ai">Vs AI</option>
+					</select>
+					<label for="difficulty">Difficoltà:</label>
+					<select id="difficulty" disabled>
+						<option value="easy">Facile</option>
+						<option value="medium" selected>Medio</option>
+						<option value="hard">Difficile</option>
+					</select>
+					<button id="reset">Reset</button>
+				</div>
 			</div>
 		</div>
 

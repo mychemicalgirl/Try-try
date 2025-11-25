@@ -1,43 +1,54 @@
-// Tic Tac Toe - semplice logica per due giocatori
+// Tic Tac Toe with optional AI opponent (easy/medium/hard)
 
 const X = 'X'
 const O = 'O'
-let currentPlayer = X
 let boardState = Array(9).fill(null)
+let currentPlayer = X
 let isGameActive = true
 
 const winningCombos = [
-	[0,1,2], [3,4,5], [6,7,8],
-	[0,3,6], [1,4,7], [2,5,8],
-	[0,4,8], [2,4,6]
+	[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
 ]
 
 const cells = Array.from(document.querySelectorAll('.cell'))
 const statusEl = document.getElementById('status')
 const currentEl = document.getElementById('current')
 const resetBtn = document.getElementById('reset')
+const modeSelect = document.getElementById('mode')
+const difficultySelect = document.getElementById('difficulty')
+
+function renderBoard(){
+	cells.forEach((cell, i) => {
+		cell.textContent = boardState[i] || ''
+		cell.disabled = !!boardState[i] || !isGameActive
+		cell.classList.toggle('win', false)
+	})
+	currentEl.textContent = currentPlayer
+}
 
 function handleCellClick(e){
-	const cell = e.currentTarget
-	const idx = Number(cell.dataset.cell)
+	const idx = Number(e.currentTarget.dataset.cell)
 	if(!isGameActive || boardState[idx]) return
+	makeMove(idx, currentPlayer)
+}
 
-	boardState[idx] = currentPlayer
-	cell.textContent = currentPlayer
-	cell.disabled = true
-
-	const winCombo = checkWin(currentPlayer)
+function makeMove(idx, player){
+	boardState[idx] = player
+	renderBoard()
+	const winCombo = checkWin(player)
 	if(winCombo){
-		endGame(false, winCombo)
+		endGame(false, winCombo, player)
 		return
 	}
-
 	if(checkDraw()){
 		endGame(true)
 		return
 	}
-
 	swapPlayer()
+	if(modeSelect.value === 'ai' && isGameActive && currentPlayer === O){
+		// let AI play as O
+		setTimeout(() => aiPlay(), 300)
+	}
 }
 
 function swapPlayer(){
@@ -56,46 +67,119 @@ function checkWin(player){
 }
 
 function checkDraw(){
-	return boardState.every(cell => cell !== null)
+	return boardState.every(Boolean)
 }
 
-function endGame(isDraw, winCombo){
+function endGame(isDraw, winCombo, winner){
 	isGameActive = false
 	if(isDraw){
 		statusEl.textContent = 'Pareggio!'
 	} else {
-		statusEl.textContent = `Vittoria: ${currentPlayer}`
+		statusEl.textContent = `Vittoria: ${winner}`
 		highlightWin(winCombo)
 	}
 }
 
 function highlightWin(combo){
 	if(!combo) return
-	for(const i of combo){
-		const c = cells[i]
-		c.classList.add('win')
-	}
+	combo.forEach(i => {
+		cells[i].classList.add('win')
+	})
 }
 
 function resetGame(){
 	boardState = Array(9).fill(null)
 	isGameActive = true
 	currentPlayer = X
-	currentEl.textContent = currentPlayer
-	statusEl.textContent = `Turno: `
-	// clear cells
-	cells.forEach(cell => {
-		cell.textContent = ''
-		cell.disabled = false
-		cell.classList.remove('win')
-	})
+	statusEl.textContent = 'Turno: '
+	renderBoard()
 }
 
-// Init listeners
+// AI logic
+function aiPlay(){
+	const diff = difficultySelect.value
+	let move
+	if(diff === 'easy') move = aiRandom()
+	else if(diff === 'medium') move = aiMedium()
+	else move = aiHard()
+	if(typeof move === 'number') makeMove(move, O)
+}
+
+function aiRandom(){
+	const empty = boardState.map((v,i)=> v ? null : i).filter(v=>v!==null)
+	if(empty.length===0) return null
+	return empty[Math.floor(Math.random()*empty.length)]
+}
+
+function aiMedium(){
+	// 1) win if possible
+	for(let i=0;i<9;i++) if(!boardState[i]){
+		boardState[i]=O
+		if(checkWin(O)){ boardState[i]=null; return i }
+		boardState[i]=null
+	}
+	// 2) block player
+	for(let i=0;i<9;i++) if(!boardState[i]){
+		boardState[i]=X
+		if(checkWin(X)){ boardState[i]=null; return i }
+		boardState[i]=null
+	}
+	// 3) take center
+	if(!boardState[4]) return 4
+	return aiRandom()
+}
+
+function aiHard(){
+	// Minimax for optimal play (AI is O)
+	function minimax(state, player){
+		const winner = getWinner(state)
+		if(winner === O) return {score: 1}
+		if(winner === X) return {score: -1}
+		if(state.every(Boolean)) return {score: 0}
+
+		const moves = []
+		for(let i=0;i<9;i++){
+			if(!state[i]){
+				state[i] = player
+				const result = minimax(state, player===O?X:O)
+				moves.push({index:i, score: result.score})
+				state[i] = null
+			}
+		}
+		if(player === O){
+			// maximize
+			let best = moves[0]
+			for(const m of moves) if(m.score > best.score) best = m
+			return best
+		} else {
+			// minimize
+			let best = moves[0]
+			for(const m of moves) if(m.score < best.score) best = m
+			return best
+		}
+	}
+	const copy = boardState.slice()
+	const best = minimax(copy, O)
+	return best.index
+}
+
+function getWinner(state){
+	for(const combo of winningCombos){
+		const [a,b,c] = combo
+		if(state[a] && state[a] === state[b] && state[a] === state[c]) return state[a]
+	}
+	return null
+}
+
+// Init
 cells.forEach(cell => cell.addEventListener('click', handleCellClick))
 resetBtn.addEventListener('click', resetGame)
+modeSelect.addEventListener('change', ()=>{
+	difficultySelect.disabled = modeSelect.value !== 'ai'
+	resetGame()
+})
+difficultySelect.addEventListener('change', ()=> resetGame())
 
-// small UX: show initial status more clearly
 statusEl.textContent = 'Turno: '
-currentEl.textContent = currentPlayer
+renderBoard()
 

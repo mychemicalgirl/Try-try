@@ -227,3 +227,13 @@ difficultySelect.addEventListener('change', ()=> resetGame())
 statusEl.textContent = 'Turno: '
 renderBoard()
 
+// Ensure start screen is shown and board hidden on initial load
+document.addEventListener('DOMContentLoaded', ()=>{
+	if(startScreen) startScreen.classList.remove('hidden')
+	if(boardContainer) boardContainer.classList.add('hidden')
+	// pause the game until Start pressed
+	isGameActive = false
+	statusEl.textContent = 'Seleziona impostazioni e premi Start'
+	renderBoard()
+})
+

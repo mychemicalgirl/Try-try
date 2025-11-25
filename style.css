@@ -1,0 +1,53 @@
+:root{
+	--bg: #f6f8fb;
+	--card: #ffffff;
+	--accent: #3b82f6;
+	--muted: #6b7280;
+	--win: #10b981;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+	margin:0;
+	font-family:Inter, system-ui, -apple-system, "Helvetica Neue", Arial;
+	background:linear-gradient(180deg, var(--bg), #eef2ff);
+	color:#111827;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	padding:2rem;
+}
+
+.app{width:100%;max-width:420px;text-align:center}
+h1{margin:0 0 1rem;font-size:1.5rem}
+
+.board-container{background:var(--card);padding:1rem;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+.status{font-weight:600;margin-bottom:0.75rem;color:var(--muted)}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.cell{
+	aspect-ratio:1/1;
+	width:100%;
+	border-radius:8px;
+	background:linear-gradient(180deg,#fff,#fafafa);
+	border:2px solid #e6edf6;
+	font-size:2.2rem;
+	font-weight:700;
+	color:#0f172a;
+	display:flex;align-items:center;justify-content:center;
+	cursor:pointer;transition:transform .08s ease,background .15s ease,border-color .12s ease;
+}
+.cell:hover{transform:translateY(-3px)}
+.cell:focus{outline:3px solid rgba(59,130,246,0.12)}
+.cell[disabled]{cursor:default;opacity:0.95}
+
+.controls{margin-top:12px;display:flex;gap:8px;justify-content:center}
+#reset{background:transparent;border:1px solid var(--accent);padding:0.5rem 1rem;border-radius:8px;color:var(--accent);cursor:pointer}
+#reset:hover{background:rgba(59,130,246,0.06)}
+
+.cell.win{background:linear-gradient(90deg, #ecfdf5, #d1fae5);border-color:var(--win);color:var(--win)}
+.note{margin-top:10px;color:var(--muted);font-size:0.9rem}
+
+@media (max-width:420px){
+	.cell{font-size:1.6rem}
+}

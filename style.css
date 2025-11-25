@@ -11,7 +11,14 @@ html,body{height:100%}
 body{
 	margin:0;
 	font-family:Inter, system-ui, -apple-system, "Helvetica Neue", Arial;
-	background:linear-gradient(180deg, var(--bg), #eef2ff);
+	/* Background image (place your image at `assets/bg.png`) */
+	background-color: var(--bg);
+	background-image: url('assets/bg.png');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	/* subtle overlay gradient for readability */
+	background-blend-mode: overlay;
 	color:#111827;
 	display:flex;
 	align-items:center;
@@ -29,7 +36,7 @@ h1{margin:0 0 1rem;font-size:1.5rem}
 .board-container.hidden{display:none}
 
 /* Start screen styles */
-.start-screen{background:var(--card);padding:1.25rem;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06);margin-bottom:14px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.start-screen{background:rgba(255,255,255,0.92);padding:1.25rem;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06);margin-bottom:14px;display:flex;flex-direction:column;gap:10px;align-items:center}
 .start-screen h2{margin:0;font-size:1.25rem}
 .start-screen label{font-size:0.95rem;color:var(--muted)}
 .start-screen select{padding:0.45rem 0.6rem;border-radius:6px;border:1px solid #e6edf6;background:white}
